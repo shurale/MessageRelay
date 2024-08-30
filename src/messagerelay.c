@@ -6,7 +6,6 @@
 #include <ctype.h>
 
 #include <tox/tox.h>
-#include <tox/toxdns.h>
 #include <tox/toxencryptsave.h>
 
 #include "messagerelay.h"
@@ -236,9 +235,9 @@ int init_tox() {
 
     load_data();
 
-    tox_callback_self_connection_status(tox, (tox_self_connection_status_cb *)on_connection_change, NULL);
-    tox_callback_friend_message(tox, (tox_friend_message_cb *)on_message, NULL);
-    tox_callback_friend_request(tox, (tox_friend_request_cb *)on_friend_request, NULL);
+    tox_callback_self_connection_status(tox, (tox_self_connection_status_cb *)on_connection_change);
+    tox_callback_friend_message(tox, (tox_friend_message_cb *)on_message);
+    tox_callback_friend_request(tox, (tox_friend_request_cb *)on_friend_request);
 
     TOX_ERR_SET_INFO name_error;
     tox_self_set_name(tox, (uint8_t*) "Message Relay", strlen("Message Relay"), &name_error);
@@ -460,7 +459,7 @@ void loop() {
     int counter = 0;
 
     while(keep_running) {
-        tox_iterate(tox);
+        tox_iterate(tox, NULL);
 
         refresh_screen();
 
